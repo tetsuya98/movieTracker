@@ -1,0 +1,11 @@
+{{ form_start(monFormulaire) }}
+ {{ form_errors(monFormulaire) }}
+<ul class="list-group">
+    <li class="list-group-item">{{ form_row(monFormulaire.username) }}</li>
+    <li class="list-group-item">{{ form_row(monFormulaire.email) }}</li>
+    <li class="list-group-item">{{ form_row(monFormulaire.password.first) }}</li>
+    <li class="list-group-item">{{ form_row(monFormulaire.password.second) }}</li>
+    <li class="list-group-item">{{ form_row(monFormulaire.profil_img) }}</li>
+    <li class="list-group-item">{{ form_row(monFormulaire.submit, { 'attr': {'class': 'btn waves-effect waves-light'} }) }}</li>
+</ul>
+{{ form_end(monFormulaire) }}

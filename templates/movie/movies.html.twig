@@ -1,0 +1,71 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+    Movies - movieTracker
+{% endblock %}
+
+{% block body %}
+    <div class="container">
+        <div class="row">
+            <h1>Movies</h1>
+            <div class="input-field col s6">
+                <select onchange="location = this.value;">
+                    <option value="" disabled selected>Choose your option</option>
+                    <option value="{{ path('saveOrder', {'order': 'alpha'}) }}">Alphabethique</option>
+                    <option value="{{ path('saveOrder', {'order': 'added'}) }}">Last Added</option>
+                    <option value="{{ path('saveOrder', {'order': 'release'}) }}">Release Date</option>
+                    {% if filter == "seen" %}
+                        <option value="{{ path('saveOrder', {'order': 'vue'}) }}">Seen Date</option>
+                    {% endif %}
+                </select>
+                <label>Order By</label>
+            </div>
+            <div class="input-field col s6">
+                <select onchange="location = this.value;">
+                    <option value="" disabled selected>Choose your option</option>
+                    <option  value="{{ path('saveFilter', {'filter': 'all'}) }}">All</option>
+                    <option  value="{{ path('saveFilter', {'filter': 'seen'}) }}">Seen</option>
+                    <option  value="{{ path('saveFilter', {'filter': 'notseen'}) }}">Not Seen</option>
+                </select>
+                <label>Filter</label>
+            </div>
+        </div>
+            <div class="row">
+                {% for movie in movies %}
+                        <div class="col s2">
+                            <div class="card">
+                                <div class="card-image">
+                                    <img height="200" src="{{ asset(movie.cover) }}">
+                                </div>
+                                <div class="card-action">
+                                    {% if movie.vue == 0 %}
+                                        <a class="btn-floating waves-effect waves-light blue-grey darken-3 tooltipped" href="{{ path('vueMovie', {'id': movie.id, 'page': 'movies'}) }}" data-tooltip="Vue">
+                                            <i class="material-icons">check</i></a>
+                                    {% else %}
+                                        <a class="btn-floating waves-effect waves-light green accent-4 tooltipped" href="{{ path('pasvueMovie', {'id': movie.id, 'page': 'movies'}) }}" data-tooltip="Non Vue">
+                                            <i class="material-icons">check</i></a>
+                                    {% endif %}
+                                    <a class="btn-floating waves-effect waves-light blue-grey darken-3 tooltipped" href="{{ path('movie', { 'id': movie.id }) }}" data-tooltip="Détails">
+                                        <i class="material-icons">subject</i></a>
+                                </div>
+                            </div>
+                        </div>
+                {% endfor %}
+            </div>
+        <div class="fixed-action-btn">
+            <a class="btn-floating btn-large waves-effect waves-light blue-grey darken-3" href="{{ path('createMovie') }}">
+                <i class="large material-icons">add</i>
+            </a>
+        </div>
+    </div>
+    <script src="{{ asset('/js/jquery.js') }}"></script>
+    <script>
+        $(document).ready(function(){
+            $('.tooltipped').tooltip()
+        });
+        $(document).ready(function(){
+            $('select').formSelect();
+        });
+    </script>
+
+{% endblock %}

@@ -1,0 +1,75 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+    {{ movie.title }}
+{% endblock %}
+
+{% block body %}
+    <div class="container">
+        <h1>{{ movie.title }}</h1>
+        <div class="row">
+            <div class="col s6">
+                <img src="{{ asset(movie.cover) }}" width="300" height="400">
+            </div>
+            <div class="col s6">
+                <table>
+                    <tbody>
+                    <tr>
+                        <th>Titre</th>
+                        <td>{{ movie.title }}</td>
+                    </tr>
+                    <tr>
+                        <th>Date de Sortie</th>
+                        <td>{{ movie.releaseDate|date('d-m-Y') }}</td>
+                    </tr>
+                    <tr>
+                        <th>Date d'Ajout</th>
+                        <td>{{ movie.createDate|date('d-m-Y') }}</td>
+                    </tr>
+                    {% if movie.vue == 1 %}
+                        <tr>
+                            <th>Date de Visionnage</th>
+                            <td>{{ movie.vueDate|date('d-m-Y') }}</td>
+                        </tr>
+                    {% endif %}
+                    <tr>
+                        <th>Action</th>
+                        <td>
+                            <a class="btn-floating waves-effect waves-light blue-grey darken-3 tooltipped" href="{{ path('editMovie', { 'id': movie.id }) }}" data-tooltip="Edit">
+                                <i class="material-icons">edit</i></a>
+                            <a class="btn-floating waves-effect waves-light red darken-1 tooltipped modal-trigger" href="#suppr" data-tooltip="Suppr">
+                                <i class="material-icons">delete</i></a>
+                            {% if movie.vue == 0 %}
+                                <a class="btn-floating waves-effect waves-light blue-grey darken-3 tooltipped" href="{{ path('vueMovie', {'id': movie.id, 'page': 'movie'}) }}" data-tooltip="Vue">
+                                    <i class="material-icons">check</i></a>
+                            {% else %}
+                                <a class="btn-floating waves-effect waves-light green accent-4 tooltipped" href="{{ path('pasvueMovie', {'id': movie.id, 'page': 'movie'}) }}" data-tooltip="Non Vue">
+                                    <i class="material-icons">check</i></a>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div id="suppr" class="modal">
+            <div class="modal-content center-align">
+                <h4>Voulez-vous supprimer ?</h4>
+                <a href="{{ path('removeMovie', { 'id': movie.id }) }}" class="modal-close waves-effect waves-red btn-flat">Oui</a>
+                <a href="#!" class="modal-close waves-effect waves-gray btn-flat">Non</a>
+            </div>
+        </div>
+
+        <script src="{{ asset('/js/jquery.js') }}"></script>
+        <script>
+            $(document).ready(function(){
+                $('.tooltipped').tooltip()
+            });
+            $(document).ready(function(){
+                $('.modal').modal();
+            });
+        </script>
+        <a class="btn btn-secondary btn-lg btn-block" href={{ path('movies') }} role="button">Return</a>
+    </div>
+{% endblock %}

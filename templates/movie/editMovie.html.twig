@@ -1,0 +1,17 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+    Nouveau - movieTracker
+{% endblock %}
+
+{% block body %}
+    <div class="container">
+        <h1>Edit Movie</h1>
+        {% include "Form/movie.html.twig" %}
+    </div>
+    <script>
+        $(document).ready(function(){
+            $('.datepicker').datepicker();
+        });
+    </script>
+{% endblock %}

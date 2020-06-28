@@ -1,3 +1,61 @@
 #index:
 #    path: /
 #    controller: App\Controller\DefaultController::index
+
+accueil:
+    path: /
+    controller: App\Controller\MovieController::accueil
+
+createMovie:
+    path: /movie/create
+    controller: App\Controller\MovieController::createMovie
+
+movies:
+    path: /movies
+    controller: App\Controller\MovieController::showMovies
+
+movie:
+    path: /movie/{id}
+    controller: App\Controller\MovieController::showMovie
+
+editMovie:
+    path: /movie/edit/{id}
+    controller: App\Controller\MovieController::editMovie
+
+removeMovie:
+    path: /movie/remove/{id}
+    controller: App\Controller\MovieController::removeMovie
+
+vueMovie:
+    path: /movie/vue/{id}/{page}
+    controller: App\Controller\MovieController::vueMovie
+
+pasvueMovie:
+    path: /movie/vue/pas/{id}/{page}
+    controller: App\Controller\MovieController::pasvueMovie
+
+saveFilter:
+    path: /movies/filtre/{filter}
+    controller: App\Controller\MovieController::saveFilter
+
+saveOrder:
+    path: /movies/order/{order}
+    controller: App\Controller\MovieController::saveOrder
+
+#User
+
+addUser:
+    path: /signin
+    controller: App\Controller\UserController::addUser
+
+user:
+    path: /user
+    controller: App\Controller\UserController::user
+
+editUserImg:
+    path: /user/edit/img
+    controller: App\Controller\UserController::editUserImg
+
+editUser:
+    path: /user/edit
+    controller: App\Controller\UserController::editUser

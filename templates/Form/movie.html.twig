@@ -1,0 +1,9 @@
+{{ form_start(monFormulaire) }}
+ {{ form_errors(monFormulaire) }}
+<ul class="list-group">
+    <li class="list-group-item">{{ form_row(monFormulaire.title) }}</li>
+    <li class="list-group-item">{{ form_row(monFormulaire.release_date) }}</li>
+    <li class="list-group-item">{{ form_row(monFormulaire.cover) }}</li>
+    <li class="list-group-item">{{ form_row(monFormulaire.submit, { 'attr': {'class': 'btn waves-effect waves-light'} }) }}</li>
+</ul>
+{{ form_end(monFormulaire) }}

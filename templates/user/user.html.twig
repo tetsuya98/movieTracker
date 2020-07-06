@@ -24,13 +24,19 @@
                         <td>
                             <a class="btn-floating waves-effect waves-light blue-grey darken-3 tooltipped" href="{{ path('editUser') }}" data-tooltip="Edit">
                                 <i class="material-icons">edit</i></a>
-                            <a class="btn-floating waves-effect waves-light blue-grey darken-3 tooltipped" href="" data-tooltip="Edit Password">
+                            <a class="btn-floating waves-effect waves-light blue-grey darken-3 tooltipped" href="{{ path('editUserPasswd') }}" data-tooltip="Edit Password">
                                 <i class="material-icons">vpn_key</i></a>
                         </td>
                     </tr>
                     </tbody>
                 </table>
                 <p>Vous êtes membre depuis le {{ user.createDate|date('d-m-Y') }}.</p>
+                {% for message in app.flashes('notice') %}
+                    <div class="chip">
+                        {{ message }}
+                        <i class="close material-icons">close</i>
+                    </div>
+                {% endfor %}
             </div>
         </div>
     </div>

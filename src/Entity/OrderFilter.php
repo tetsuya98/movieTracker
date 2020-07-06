@@ -34,6 +34,16 @@ class OrderFilter
      */
     private $user;
 
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $affichage;
+
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $ascen;
+
     public function __construct()
     {
         $this->user = new ArrayCollection();
@@ -76,6 +86,30 @@ class OrderFilter
     public function setUser(?User $user): self
     {
         $this->user = $user;
+
+        return $this;
+    }
+
+    public function getAffichage(): ?string
+    {
+        return $this->affichage;
+    }
+
+    public function setAffichage(string $affichage): self
+    {
+        $this->affichage = $affichage;
+
+        return $this;
+    }
+
+    public function getAscen(): ?string
+    {
+        return $this->ascen;
+    }
+
+    public function setAscen(string $ascen): self
+    {
+        $this->ascen = $ascen;
 
         return $this;
     }

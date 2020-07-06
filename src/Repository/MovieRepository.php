@@ -23,66 +23,177 @@ class MovieRepository extends ServiceEntityRepository
     //  * @return Movie[] Returns an array of Movie objects
     //  */
 
-    public function findByUser($value, $order)
+    public function findByUser($value, $order, $asc)
     {
-        return $this->createQueryBuilder('m')
-            ->andWhere('m.user = :val')
-            ->setParameter('val', $value)
-            ->orderBy('m.id', 'ASC')
-            ->getQuery()
-            ->getResult()
-        ;
+        if ($asc == "ASC") {
+            if ($order == "alpha") {
+                return $this->createQueryBuilder('m')
+                    ->andWhere('m.user = :val')
+                    ->setParameter('val', $value)
+                    ->orderBy('m.title', 'ASC')
+                    ->getQuery()
+                    ->getResult()
+                    ;
+            }
+            if ($order == "added") {
+                return $this->createQueryBuilder('m')
+                    ->andWhere('m.user = :val')
+                    ->setParameter('val', $value)
+                    ->orderBy('m.id', 'ASC')
+                    ->getQuery()
+                    ->getResult()
+                    ;
+            }
+            if ($order == "release") {
+                return $this->createQueryBuilder('m')
+                    ->andWhere('m.user = :val')
+                    ->setParameter('val', $value)
+                    ->orderBy('m.release_date', 'ASC')
+                    ->getQuery()
+                    ->getResult()
+                    ;
+            }
+            if ($order == "vue") {
+                return $this->createQueryBuilder('m')
+                    ->andWhere('m.user = :val')
+                    ->setParameter('val', $value)
+                    ->orderBy('m.vue_date', 'ASC')
+                    ->getQuery()
+                    ->getResult();
+            }
+        }else{
+            if ($order == "alpha") {
+                return $this->createQueryBuilder('m')
+                    ->andWhere('m.user = :val')
+                    ->setParameter('val', $value)
+                    ->orderBy('m.title', 'DESC')
+                    ->getQuery()
+                    ->getResult()
+                    ;
+            }
+            if ($order == "added") {
+                return $this->createQueryBuilder('m')
+                    ->andWhere('m.user = :val')
+                    ->setParameter('val', $value)
+                    ->orderBy('m.create_date', 'DESC')
+                    ->getQuery()
+                    ->getResult()
+                    ;
+            }
+            if ($order == "release") {
+                return $this->createQueryBuilder('m')
+                    ->andWhere('m.user = :val')
+                    ->setParameter('val', $value)
+                    ->orderBy('m.release_date', 'DESC')
+                    ->getQuery()
+                    ->getResult()
+                    ;
+            }
+            if ($order == "vue") {
+                return $this->createQueryBuilder('m')
+                    ->andWhere('m.user = :val')
+                    ->setParameter('val', $value)
+                    ->orderBy('m.vue_date', 'DESC')
+                    ->getQuery()
+                    ->getResult()
+                    ;
+            }
+        }
     }
 
-    public function findByVue($value, $filter, $order)
+    public function findByVue($value, $filter, $order, $asc)
     {
-        if ($order == "alpha") {
-            return $this->createQueryBuilder('m')
-                ->andWhere('m.user = :val')
-                ->setParameter('val', $value)
-                ->andWhere('m.vue = :filter')
-                ->setParameter('filter', $filter)
-                ->orderBy('m.title', 'ASC')
-                ->getQuery()
-                ->getResult()
-                ;
+        if ($asc == "ASC") {
+            if ($order == "alpha") {
+                return $this->createQueryBuilder('m')
+                    ->andWhere('m.user = :val')
+                    ->setParameter('val', $value)
+                    ->andWhere('m.vue = :filter')
+                    ->setParameter('filter', $filter)
+                    ->orderBy('m.title', 'ASC')
+                    ->getQuery()
+                    ->getResult()
+                    ;
+            }
+            if ($order == "added") {
+                return $this->createQueryBuilder('m')
+                    ->andWhere('m.user = :val')
+                    ->setParameter('val', $value)
+                    ->andWhere('m.vue = :filter')
+                    ->setParameter('filter', $filter)
+                    ->orderBy('m.id', 'ASC')
+                    ->getQuery()
+                    ->getResult()
+                    ;
+            }
+            if ($order == "release") {
+                return $this->createQueryBuilder('m')
+                    ->andWhere('m.user = :val')
+                    ->setParameter('val', $value)
+                    ->andWhere('m.vue = :filter')
+                    ->setParameter('filter', $filter)
+                    ->orderBy('m.release_date', 'ASC')
+                    ->getQuery()
+                    ->getResult()
+                    ;
+            }
+            if ($order == "vue") {
+                return $this->createQueryBuilder('m')
+                    ->andWhere('m.user = :val')
+                    ->setParameter('val', $value)
+                    ->andWhere('m.vue = :filter')
+                    ->setParameter('filter', $filter)
+                    ->orderBy('m.vue_date', 'ASC')
+                    ->getQuery()
+                    ->getResult();
+            }
+        }else{
+            if ($order == "alpha") {
+                    return $this->createQueryBuilder('m')
+                        ->andWhere('m.user = :val')
+                        ->setParameter('val', $value)
+                        ->andWhere('m.vue = :filter')
+                        ->setParameter('filter', $filter)
+                        ->orderBy('m.title', 'DESC')
+                        ->getQuery()
+                        ->getResult()
+                        ;
+                }
+            if ($order == "added") {
+                    return $this->createQueryBuilder('m')
+                        ->andWhere('m.user = :val')
+                        ->setParameter('val', $value)
+                        ->andWhere('m.vue = :filter')
+                        ->setParameter('filter', $filter)
+                        ->orderBy('m.create_date', 'DESC')
+                        ->getQuery()
+                        ->getResult()
+                        ;
+                }
+            if ($order == "release") {
+                    return $this->createQueryBuilder('m')
+                        ->andWhere('m.user = :val')
+                        ->setParameter('val', $value)
+                        ->andWhere('m.vue = :filter')
+                        ->setParameter('filter', $filter)
+                        ->orderBy('m.release_date', 'DESC')
+                        ->getQuery()
+                        ->getResult()
+                        ;
+                }
+            if ($order == "vue") {
+                    return $this->createQueryBuilder('m')
+                        ->andWhere('m.user = :val')
+                        ->setParameter('val', $value)
+                        ->andWhere('m.vue = :filter')
+                        ->setParameter('filter', $filter)
+                        ->orderBy('m.vue_date', 'DESC')
+                        ->getQuery()
+                        ->getResult()
+                        ;
+                }
         }
-        if ($order == "added") {
-            return $this->createQueryBuilder('m')
-                ->andWhere('m.user = :val')
-                ->setParameter('val', $value)
-                ->andWhere('m.vue = :filter')
-                ->setParameter('filter', $filter)
-                ->orderBy('m.create_date', 'ASC')
-                ->getQuery()
-                ->getResult()
-                ;
-        }
-        if ($order == "release") {
-            return $this->createQueryBuilder('m')
-                ->andWhere('m.user = :val')
-                ->setParameter('val', $value)
-                ->andWhere('m.vue = :filter')
-                ->setParameter('filter', $filter)
-                ->orderBy('m.release_date', 'ASC')
-                ->getQuery()
-                ->getResult()
-                ;
-        }
-        if ($order == "vue") {
-            return $this->createQueryBuilder('m')
-                ->andWhere('m.user = :val')
-                ->setParameter('val', $value)
-                ->andWhere('m.vue = :filter')
-                ->setParameter('filter', $filter)
-                ->orderBy('m.vue_date', 'ASC')
-                ->getQuery()
-                ->getResult()
-                ;
-        }
-
     }
-
 
     /*
     public function findOneBySomeField($value): ?Movie

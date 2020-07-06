@@ -8,6 +8,7 @@ use App\Entity\Movie;
 use App\Form\EditUserType;
 use App\Form\Type\UserType;
 use App\Form\UserImgType;
+use App\Form\UserPasswdType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Response;
@@ -33,11 +34,12 @@ class UserController extends AbstractController {
             $file = $form->get('profil_img')->getData();
             if ($file) {
                 $filename = "/image/".trim($user->getUsername()).'.'.'png';
+                $file->move($this->get('upload_directory_profil'), $filename);
             }else{
                 $filename = "/image/empty.png";
             }
-            $file->move($this->getParameter('upload_directory_profil'), $filename);
             $user->setProfilImg($filename);
+            //$encoder = $this->getParameter("security.encoders");
             $encrypted = $encoder->encodePassword($user,$user->getPassword());
             $user->setPassword($encrypted);
             $user->setRoles(['ROLE_USER']);
@@ -45,6 +47,8 @@ class UserController extends AbstractController {
             $OrderFilter = new OrderFilter();
             $OrderFilter->setFiltre("notseen");
             $OrderFilter->setOrdre("alpha");
+            $OrderFilter->setAscen('ASC');
+            $OrderFilter->setAffichage("carte");
             $OrderFilter->setUser($user);
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($user);
@@ -77,23 +81,56 @@ class UserController extends AbstractController {
             }
 
             $entityManager->flush();
-            return $this->redirectToRoute('movies');
+            return $this->redirectToRoute('user');
         }
         return $this->render('user/editUserImg.html.twig',
             array('monFormulaire' => $form->createView()));
     }
 
-    public function editUser(Request $request) {
+    public function editUser(Request $request, UserPasswordEncoderInterface $encoder) {
         $entityManager = $this->getDoctrine()->getManager();
         $user = $entityManager->getRepository(User::class)->find($this->getUser());
+        $password = $user->getPassword();
         $form = $this->createForm(EditUserType::class, $user, ['action' => $this->generateUrl('editUser')]);
         $form->add('submit', SubmitType::class, array('label' => 'Save'));
         $form->handleRequest($request);
         if ($form->isSubmitted()  && $form->isValid()) {
+            if (!$encoder->isPasswordValid($this->getUser(), $form->get('password')->getData()."")) {
+                $this->addFlash('notice', 'Votre mot de passe est faux !');
+                return $this->render('user/editUser.html.twig',
+                    array('monFormulaire' => $form->createView()));
+            }
+            $this->addFlash('notice', 'Vorte profile a été mis à jour !');
             $entityManager->flush();
             return $this->redirectToRoute('user');
         }
         return $this->render('user/editUser.html.twig',
+            array('monFormulaire' => $form->createView()));
+    }
+
+    public function editUserPasswd(Request $request, UserPasswordEncoderInterface $encoder) {
+        $entityManager = $this->getDoctrine()->getManager();
+        $user = $entityManager->getRepository(User::class)->find($this->getUser());
+        $newUser = new User();
+        $form = $this->createForm(UserPasswdType::class, $newUser, ['action' => $this->generateUrl('editUserPasswd')]);
+        $form->add('submit', SubmitType::class, array('label' => 'Save'));
+        $form->handleRequest($request);
+        if ($form->isSubmitted()  && $form->isValid()) {
+            if (!$encoder->isPasswordValid($this->getUser(), $form->get('oldPassword')->getData()."")) {
+                $this->addFlash('notice', 'Votre mot de passe est faux !');
+                return $this->render('user/editUserPasswd.html.twig',
+                    array('monFormulaire' => $form->createView()));
+            }
+            $encrypted = $encoder->encodePassword($user,$form->get('password')->getData());
+            $user->setPassword($encrypted);
+            $entityManager->persist($user);
+            $entityManager->flush();
+            //$this->login();
+            $this->addFlash('notice','Votre mot de passe a bien été changé !');
+            return $this->redirectToRoute('user');
+        }
+        $this->addFlash('notice', 'Vous avez rentré deux mots de passe different !');
+        return $this->render('user/editUserPasswd.html.twig',
             array('monFormulaire' => $form->createView()));
     }
 

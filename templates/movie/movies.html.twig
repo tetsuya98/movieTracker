@@ -8,19 +8,29 @@
     <div class="container">
         <div class="row">
             <h1>Movies</h1>
-            <div class="input-field col s6">
+            <div class="input-field col s5">
                 <select onchange="location = this.value;">
-                    <option value="" disabled selected>Choose your option</option>
-                    <option value="{{ path('saveOrder', {'order': 'alpha'}) }}">Alphabethique</option>
-                    <option value="{{ path('saveOrder', {'order': 'added'}) }}">Last Added</option>
-                    <option value="{{ path('saveOrder', {'order': 'release'}) }}">Release Date</option>
-                    {% if filter == "seen" %}
-                        <option value="{{ path('saveOrder', {'order': 'vue'}) }}">Seen Date</option>
+                    {% if asc == "ASC" %}
+                        <option value="" disabled selected>Choose your option</option>
+                        <option value="{{ path('saveOrder', {'order': 'alpha', 'asc': 'DESC'}) }}">Alphabethique</option>
+                        <option value="{{ path('saveOrder', {'order': 'added', 'asc': 'DESC'}) }}">Last Added</option>
+                        <option value="{{ path('saveOrder', {'order': 'release', 'asc': 'DESC'}) }}">Release Date</option>
+                        {% if filter == "seen" %}
+                            <option value="{{ path('saveOrder', {'order': 'vue', 'asc': 'DESC'}) }}">Seen Date</option>
+                        {% endif %}
+                    {% else %}
+                        <option value="" disabled selected>Choose your option</option>
+                        <option value="{{ path('saveOrder', {'order': 'alpha', 'asc': 'ASC'}) }}">Alphabethique</option>
+                        <option value="{{ path('saveOrder', {'order': 'added', 'asc': 'ASC'}) }}">Last Added</option>
+                        <option value="{{ path('saveOrder', {'order': 'release', 'asc': 'ASC'}) }}">Release Date</option>
+                        {% if filter == "seen" %}
+                            <option value="{{ path('saveOrder', {'order': 'vue', 'asc': 'ASC'}) }}">Seen Date</option>
+                        {% endif %}
                     {% endif %}
                 </select>
                 <label>Order By</label>
             </div>
-            <div class="input-field col s6">
+            <div class="input-field col s5">
                 <select onchange="location = this.value;">
                     <option value="" disabled selected>Choose your option</option>
                     <option  value="{{ path('saveFilter', {'filter': 'all'}) }}">All</option>
@@ -29,9 +39,23 @@
                 </select>
                 <label>Filter</label>
             </div>
+            {% if affichage == "carte" %}
+            <div class="input-field col s1">
+                <a class="waves-effect btn waves-light blue-grey darken-3 tooltipped" data-tooltip="Liste" href="{{ path('saveAffichage', {'affichage': 'liste'}) }}">
+                    <i class="material-icons">dehaze</i>
+                </a>
+            </div>
+            {% else %}
+            <div class="input-field col s1">
+                <a class="waves-effect btn waves-light blue-grey darken-3 tooltipped" data-tooltip="Carte" href="{{ path('saveAffichage', {'affichage': 'carte'}) }}">
+                    <i class="material-icons">apps</i>
+                </a>
+            </div>
+            {% endif %}
         </div>
             <div class="row">
                 {% for movie in movies %}
+                    {% if affichage == "carte" %}
                         <div class="col s2">
                             <div class="card">
                                 <div class="card-image">
@@ -50,14 +74,48 @@
                                 </div>
                             </div>
                         </div>
+                    {% else %}
+                        <div class="col s12">
+                            <ul class="collection">
+                                <li class="collection-item avatar">
+                                    <img src="{{ asset(movie.cover) }}" alt="" class="circle">
+                                    <span class="title">{{ movie.title }}</span>
+                                    <p>Date de Sortie : {{ movie.releaseDate|date('d-m-Y') }}</p>
+                                    <div class="secondary-content">
+                                        {% if movie.vue == 0 %}
+                                            <a class="btn-floating waves-effect waves-light blue-grey darken-3 tooltipped" href="{{ path('vueMovie', {'id': movie.id, 'page': 'movies'}) }}" data-tooltip="Vue">
+                                                <i class="material-icons">check</i></a>
+                                        {% else %}
+                                            <a class="btn-floating waves-effect waves-light green accent-4 tooltipped" href="{{ path('pasvueMovie', {'id': movie.id, 'page': 'movies'}) }}" data-tooltip="Non Vue">
+                                                <i class="material-icons">check</i></a>
+                                        {% endif %}
+                                        <a class="btn-floating waves-effect waves-light blue-grey darken-3 tooltipped" href="{{ path('movie', { 'id': movie.id }) }}" data-tooltip="Détails">
+                                            <i class="material-icons">subject</i></a>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                    {% endif %}
                 {% endfor %}
             </div>
+        <div class="center">
+            <ul class="pagination">
+                <li class="disabled"><a href="#!"><i class="material-icons">chevron_left</i></a></li>
+                <li class="active blue-grey darken-3"><a href="#!">1</a></li>
+                <li class="waves-effect"><a href="#!">2</a></li>
+                <li class="waves-effect"><a href="#!">3</a></li>
+                <li class="waves-effect"><a href="#!">4</a></li>
+                <li class="waves-effect"><a href="#!">5</a></li>
+                <li class="waves-effect"><a href="#!"><i class="material-icons">chevron_right</i></a></li>
+            </ul>
+        </div>
         <div class="fixed-action-btn">
             <a class="btn-floating btn-large waves-effect waves-light blue-grey darken-3" href="{{ path('createMovie') }}">
                 <i class="large material-icons">add</i>
             </a>
         </div>
     </div>
+
     <script src="{{ asset('/js/jquery.js') }}"></script>
     <script>
         $(document).ready(function(){

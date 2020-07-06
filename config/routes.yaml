@@ -39,8 +39,12 @@ saveFilter:
     controller: App\Controller\MovieController::saveFilter
 
 saveOrder:
-    path: /movies/order/{order}
+    path: /movies/order/{order}-{asc}
     controller: App\Controller\MovieController::saveOrder
+
+saveAffichage:
+    path: /movies/affichage/{affichage}
+    controller: App\Controller\MovieController::saveAffichage
 
 #User
 
@@ -59,3 +63,7 @@ editUserImg:
 editUser:
     path: /user/edit
     controller: App\Controller\UserController::editUser
+
+editUserPasswd:
+    path: /user/edit/password
+    controller: App\Controller\UserController::editUserPasswd

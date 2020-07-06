@@ -1,18 +1,18 @@
 {% extends 'base.html.twig' %}
 
 {% block title %}
-    Edit - movieTracker
+    Edit Password - movieTracker
 {% endblock %}
 
 {% block body %}
     <div class="container">
-        <h1>Edit</h1>
+        <h1>Edit Password</h1>
         {% for message in app.flashes('notice') %}
             <div class="chip red">
                 {{ message }}
                 <i class="close material-icons">close</i>
             </div>
         {% endfor %}
-        {% include "Form/editUser.html.twig" %}
+        {% include "Form/editUserPasswd.html.twig" %}
     </div>
 {% endblock %}

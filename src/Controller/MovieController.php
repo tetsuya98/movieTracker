@@ -25,10 +25,10 @@ class MovieController extends AbstractController {
             $file = $form->get('cover')->getData();
             if ($file) {
                 $filename = "/cover/".trim($movie->getTitle()).'.'.'png';
+                $file->move($this->getParameter('upload_directory'), $filename);
             }else{
                 $filename = "/cover/empty.png";
             }
-            $file->move($this->getParameter('upload_directory'), $filename);
             $movie->setCover($filename);
             $movie->setUser($this->getUser());
             $movie->setVue(0);
@@ -46,18 +46,20 @@ class MovieController extends AbstractController {
         $OrderFilter = $this->getDoctrine()->getRepository(OrderFilter::class)->findByUser($this->getUser());
         $filter = $OrderFilter[0]->getFiltre();
         $order = $OrderFilter[0]->getOrdre();
+        $affichage = $OrderFilter[0]->getAffichage();
+        $asc = $OrderFilter[0]->getAscen();
 
         if ($filter == "seen") {
-            $movies = $this->getDoctrine()->getRepository(Movie::class)->findByVue($this->getUser(), 1, $order);
+            $movies = $this->getDoctrine()->getRepository(Movie::class)->findByVue($this->getUser(), 1, $order, $asc);
         }else{
             if ($filter == "notseen") {
-                $movies = $this->getDoctrine()->getRepository(Movie::class)->findByVue($this->getUser(), 0, $order);
+                $movies = $this->getDoctrine()->getRepository(Movie::class)->findByVue($this->getUser(), 0, $order, $asc);
             }else{
-                $movies = $this->getDoctrine()->getRepository(Movie::class)->findByUser($this->getUser(), $order);
+                $movies = $this->getDoctrine()->getRepository(Movie::class)->findByUser($this->getUser(), $order, $asc);
             }
         }
         return $this->render('movie/movies.html.twig',
-            array('movies' => $movies, 'filter' =>$filter));
+            array('movies' => $movies, 'filter' => $filter, 'affichage' => $affichage, 'asc' => $asc));
     }
 
     public function showMovie($id) {
@@ -161,14 +163,27 @@ class MovieController extends AbstractController {
         return $this->redirectToRoute('movies');
     }
 
-    public function saveOrder($order) {
+    public function saveOrder($order, $asc) {
         $entityManager = $this->getDoctrine()->getManager();
         $of = $entityManager->getRepository(OrderFilter::class)->findByUser($this->getUser());
 
         $of[0]->setOrdre($order);
+        $of[0]->setAscen($asc);
         $entityManager = $this->getDoctrine()->getManager();
         $entityManager->flush();
 
         return $this->redirectToRoute('movies');
+    }
+
+    public function saveAffichage($affichage) {
+        $entityManager = $this->getDoctrine()->getManager();
+        $of = $entityManager->getRepository(OrderFilter::class)->findByUser($this->getUser());
+
+        $of[0]->setAffichage($affichage);
+        $entityManager = $this->getDoctrine()->getManager();
+        $entityManager->flush();
+
+        return $this->redirectToRoute('movies');
+
     }
 }
